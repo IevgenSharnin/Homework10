@@ -15,10 +15,15 @@ class Name(Field):
 
 class Phone(Field):
     def __init__(self, value):
-        if (len (value) != 10) or (not value.isdigit()):
-            print ('Phone number should have 10 digit\n')  
-        else:
-            self.value = value
+        try:
+            if (len (value) != 10) or (not value.isdigit()):
+                raise ValueError
+            else:
+                self.value = value
+        except ValueError:
+            print ('Phone number should have 10 digit.')
+#    def __str__(self):
+#        return str(self.value) if self else None
 
 class Record:
     def __init__(self, name):
@@ -27,9 +32,12 @@ class Record:
 
     def add_phone (self, phone):
         phone_checked = Phone (phone)
-        if phone_checked:
-            self.phones.append (phone_checked)
-            print (f"Phone number for '{self.name.value}' added")
+#        print (phone_checked)
+        try:
+            self.phones.append (phone_checked.value)
+            print (f"Phone number for '{self.name.value}' added.\n")
+        except:
+            print (f"Phone number '{phone}' not added.\n") 
 
     def remove_phone (self, phone):
         try:
@@ -56,7 +64,7 @@ class Record:
 
     def __str__(self):
         try:
-            return f"Contact name: {self.name.value}; phones: {', '.join(p.value for p in self.phones)}"
+            return f"Contact name: {self.name.value}; phones: {', '.join(p for p in self.phones)}"
         except AttributeError:
             return f"Contact name: {self.name.value}; phones: no phones added"
 
@@ -66,6 +74,7 @@ class AddressBook(UserDict):
 
     def add_record (self, Record):
         self.data.update ({Record.name.value: Record})
+#        print (self.data)
         print (f"Contact '{Record.name.value}' added\n")
 
     def find (self, name):
@@ -88,7 +97,7 @@ if __name__ == "__main__":
 # Створення запису для John
     print ('-----Створення запису для John-----')
     john_record = Record("john")
-    john_record.add_phone("1234567890")
+    john_record.add_phone("12345abcde")
     john_record.add_phone("5555555555")
 
 # Додавання запису John до адресної книги
