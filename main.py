@@ -17,11 +17,15 @@ class Phone(Field):
     def __init__(self, value):
         try:
             if (len (value) != 10) or (not value.isdigit()):
+#                print (self.value) # AttributeError: 'Phone' object has no attribute 'value'
                 raise ValueError
             else:
                 self.value = value
         except ValueError:
+#            print (self.value) # AttributeError: 'Phone' object has no attribute 'value'
             print ('Phone number should have 10 digit.')
+#        print (self.value) # AttributeError: 'Phone' object has no attribute 'value'
+
 #    def __str__(self):
 #        return str(self.value) if self else None
 
@@ -34,7 +38,8 @@ class Record:
         phone_checked = Phone (phone)
 #        print (phone_checked)
         try:
-            self.phones.append (phone_checked.value)
+            print (phone_checked)
+            self.phones.append (phone_checked)
             print (f"Phone number for '{self.name.value}' added.\n")
         except:
             print (f"Phone number '{phone}' not added.\n") 
@@ -54,17 +59,18 @@ class Record:
                 if phone_checked:
                     self.phones.append (phone_checked)
                     return f"Phone number for '{self.name.value}' edited\n"
-        print (f"'{self.name.value}' don't have phone number, what you want to edit\n")
+        raise ValueError
+#        print (f"'{self.name.value}' don't have phone number, what you want to edit\n")
 
     def find_phone (self, phone):
         for find_phone in self.phones:
             if phone == find_phone.value:
-                return phone
+                return find_phone
         print (f"'{self.name.value}' don't have phone number, what you want to find\n")
 
     def __str__(self):
         try:
-            return f"Contact name: {self.name.value}; phones: {', '.join(p for p in self.phones)}"
+            return f"Contact name: {self.name.value}; phones: {', '.join(p.value for p in self.phones)}"
         except AttributeError:
             return f"Contact name: {self.name.value}; phones: no phones added"
 
@@ -72,10 +78,10 @@ class AddressBook(UserDict):
     def __init__(self):
         self.data = {}
 
-    def add_record (self, Record):
-        self.data.update ({Record.name.value: Record})
+    def add_record (self, record: Record):
+        self.data.update ({record.name.value: record})
 #        print (self.data)
-        print (f"Contact '{Record.name.value}' added\n")
+        print (f"Contact '{record.name.value}' added\n")
 
     def find (self, name):
         self.name = Name (name)
@@ -97,8 +103,8 @@ if __name__ == "__main__":
 # Створення запису для John
     print ('-----Створення запису для John-----')
     john_record = Record("john")
-    john_record.add_phone("12345abcde")
-    john_record.add_phone("5555555555")
+    john_record.add_phone("1234567890")
+    john_record.add_phone("5555555555d")
 
 # Додавання запису John до адресної книги
     print ('-----Додавання запису John до адресної книги-----')
