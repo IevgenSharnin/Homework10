@@ -15,15 +15,15 @@ class Name(Field):
 
 class Phone(Field):
     def __init__(self, value):
-        try:
-            if (len (value) != 10) or (not value.isdigit()):
+ #       try:
+        if (len (value) != 10) or (not value.isdigit()):
 #                print (self.value) # AttributeError: 'Phone' object has no attribute 'value'
-                raise ValueError
-            else:
-                self.value = value
-        except ValueError:
-#            print (self.value) # AttributeError: 'Phone' object has no attribute 'value'
             print ('Phone number should have 10 digit.')
+            raise ValueError
+        else:
+            self.value = value
+#        except ValueError:
+#            print (self.value) # AttributeError: 'Phone' object has no attribute 'value'
 #        print (self.value) # AttributeError: 'Phone' object has no attribute 'value'
 
 #    def __str__(self):
@@ -35,21 +35,33 @@ class Record:
         self.phones = []
 
     def add_phone (self, phone):
-        phone_checked = Phone (phone)
-#        print (phone_checked)
         try:
-            print (phone_checked)
-            self.phones.append (phone_checked)
-            print (f"Phone number for '{self.name.value}' added.\n")
+            phone_checked = Phone (phone)
         except:
-            print (f"Phone number '{phone}' not added.\n") 
+            return print (f"Phone number '{phone}' not added.\n")
+#        print (phone_checked)
+#        try:
+#            if phone_checked:
+#                print (phone_checked)
+        self.phones.append (phone_checked)
+        print (f"Phone number for '{self.name.value}' added.\n")
+#        except AttributeError:
+#            raise AttributeError
+#            print (f"Phone number '{phone}' not added.\n") 
 
     def remove_phone (self, phone):
         try:
-            self.phones.remove (phone)
-            print ("Phone number for '{self.name.value}' deleted\n")
+            phone_checked = Phone (phone)
         except:
-            print ('There is not this phone number\n')
+            return print (f"Phone number '{phone}' not removed.\n")
+        print (self.phones)
+        for phone_for_check in self.phones:
+            if phone_checked.value == phone_for_check.value:
+                self.phones.remove (phone_for_check)
+            return print ("Phone number for deleted\n")
+#        else:
+#        raise ValueError
+#            print ('There is not this phone number\n')
 
     def edit_phone (self, phone1, phone2):
         for exist_phone in self.phones:
@@ -88,13 +100,14 @@ class AddressBook(UserDict):
         return self.data.get (self.name.value)
 #        return self.data.get (self.name.value, print (f"Contact '{name}' not found\n"))
 
-    def delete (self, Record):
-        record_to_delete = book.find(Record)
-        if self.data.get (record_to_delete.name.value):
-            self.data.pop (record_to_delete.name.value)
-            print (f"Contact '{record_to_delete.name.value}' deleted\n")
+    def delete (self, record: str):
+#        record = AddressBook.find (record_)
+        if self.data.get (record):
+            record_deleted = self.data.pop (record)
+            print (f"Contact '{record_deleted}' deleted\n")
         else:
-            print (f"Contact book don't have contact '{record_to_delete.name.value}'\n")
+            print (f"Contact book don't have contact '{record}'\n")
+#            raise ValueError
 
 if __name__ == "__main__":
  # Створення нової адресної книги
